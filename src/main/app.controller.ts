@@ -45,9 +45,9 @@ export class AppController {
         if (url.indexOf('#') > 0) {
           url = url.substring(0, url.indexOf('#'))
         }
-        // shell.openExternal(url + '#/' + config.page)
-        this.uniappWin.loadURL(url + '#/' + config.page)
-        this.uniappWin.setAlwaysOnTop(true, 'floating')
+        shell.openExternal(url + '#/' + config.page)
+        // this.uniappWin.loadURL(url + '#/' + config.page)
+        // this.uniappWin.setAlwaysOnTop(true, 'floating')
       }
     }else{
       const projectPath = data['uniapp'] + '/pages/'
@@ -74,13 +74,8 @@ export class AppController {
   public openUniapp(config: any) {
     const data: any = this.dbConfig.get(config.id)
     if (data && data.url) {
-      if(config.type){
-        const { width, height } = screen.getPrimaryDisplay().workAreaSize
-        config.width = width
-        config.height = height
-      }
       let ishttp = /^http(s)?:\/\/.*/i.test(data.url);
-      if (!this.uniappWin && ishttp) {
+      if (!this.uniappWin && ishttp && !config.type) {
         this.uniappWin = new BrowserWindow({
           width: config.width || 388,
           height: config.height || 680,
