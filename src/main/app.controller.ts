@@ -1,8 +1,9 @@
 import { Controller, IpcHandle, IpcOn, Window } from 'einf'
-import { BrowserWindow, dialog } from 'electron'
+import { BrowserWindow, dialog,clipboard,shell } from 'electron'
 import { factory, Conf as JsonConf } from 'electron-json-config'
 import fse from 'fs-extra'
 import { download } from 'electron-dl';
+
 
 @Controller()
 export class AppController {
@@ -24,7 +25,7 @@ export class AppController {
   @IpcOn('diygw-open-uniapp')
   public openUniapp(config: any) {
     const data: any = this.dbConfig.get(config.id)
-    if (data.url) {
+    if (data && data.url) {
       if (!this.uniappWin) {
         this.uniappWin = new BrowserWindow({
           width: config.width || 388,
@@ -59,7 +60,7 @@ export class AppController {
   @IpcOn('diygw-change-uniapp')
   public changeUniapp(config: any) {
     const data: any = this.dbConfig.get(config.id)
-    if (data.url && this.uniappWin) {
+    if (data && data.url && this.uniappWin) {
       const projectPath = data['uniapp'] + '/pages/'
       const pageFile = projectPath + config.page + '.vue'
       if (!fse.existsSync(pageFile)) {
@@ -123,7 +124,23 @@ export class AppController {
           return 'error'
         }
       }
-    } else {
+    }else if (config.type === 'eleadmin'||config.type === 'eleoption') {
+      //前后分离项目
+      const pagefile = filePaths[0] + '/package.json'
+      if (fse.existsSync(pagefile)) {
+        return filePaths[0]
+      } else {
+        return 'error'
+      }
+    }else if (config.type === 'adminh5') {
+      //静态后台h5页面
+      const pagefile = filePaths[0] + '/siteinfo.js'
+      if (fse.existsSync(pagefile)) {
+        return filePaths[0]
+      } else {
+        return 'error'
+      }
+    }else {
       return filePaths[0]
     }
   }
@@ -172,7 +189,7 @@ export class AppController {
         const projectPath = data[config.code.type]
         const pageFile = projectPath + config.data.path + '.html'
         fse.outputFileSync(pageFile, config['code']['htmlValue'])
-      } else {
+      }  else {
         const projectPath = data[config.code.type] + '/pages/'
         const htmlTypes = <any>{
           weixin: 'wxml',
@@ -198,7 +215,7 @@ export class AppController {
 
         const cssPageFile =
           projectPath + config.data.path + '.' + cssTypes[config.code.type]
-        fse.outputFileSync(cssPageFile, config['code']['htmlValue'])
+        fse.outputFileSync(cssPageFile, config['code']['cssValue'])
 
         const jsPageFile = projectPath + config.data.path + '.js'
         fse.outputFileSync(jsPageFile, config['code']['jsValue'])
@@ -219,6 +236,46 @@ export class AppController {
         }
         fse.outputFileSync(pageConfig, JSON.stringify(configData, undefined, 4))
       }
+    }else if (config.code.type === 'eleadmin'||config.code.type === 'eleoption') {
+      const projectPath = data[config.code.type]
+      //生成vue文件
+      const pageFile = projectPath + "/src/views/"+config.data.path + '.vue'
+      fse.outputFileSync(pageFile, config['code']['htmlValue'])
+
+       //替换页面路由
+       const pageConfig = data[config.code.type] + '/src/router/frontRoute.ts'
+       fse.writeFileSync(pageConfig,config['code']['jsValue'])
+
+       /*
+       const frontRoute = fse.readFileSync(pageConfig).toString()
+       const jsValue = config['code']['jsValue'];
+       增加更新路由
+       //获取当前页面路径
+       const path = "//path:/"
+       const findPath = jsValue.substring(jsValue.indexOf(path)+path.length,jsValue.indexOf("{")).trim();
+       //判断路径是否已存在
+       if(frontRoute.indexOf("'"+findPath+"'")>0){
+            //插入开始
+            const  search = "export const frontRoutes={";
+            if(frontRoute.indexOf(search)>=0){
+                const startContent = frontRoute.substring(0,frontRoute.indexOf(search));
+                const endContent = frontRoute.substring(frontRoute.indexOf(search)+search.length);
+                const result = startContent + "\rroutes[0].children?.push("+config['code']['jsValue'].substring(config['code']['jsValue'].indexOf("{"))+")\r" + search + endContent
+                fse.writeFileSync(pageConfig,result)
+            }
+       }
+       */
+
+    }else if (config.code.type === 'adminh5') {
+      const projectPath = data[config.code.type]
+      //保存HTML文件
+      const pageFile = projectPath + "/"+config.data.path + '.html'
+      fse.outputFileSync(pageFile, config['code']['htmlValue'])
+
+      //保存配置siteinfojs
+      const siteinfoFile = projectPath +  '/siteinfo.js'
+      fse.outputFileSync(siteinfoFile, config['code']['jsonValue'])
+
     }
   }
 
@@ -229,4 +286,25 @@ export class AppController {
   public getVersion(config: any) {
     return this.version
   }
+
+  /**
+  * 复制内容
+  */
+  @IpcHandle('diygw-copy')
+  public copyText(data: any) {
+    if(data.type=='html'){
+      clipboard.writeHTML(data.text)
+    }else{
+      clipboard.writeText(data.text)
+    }
+  }
+
+  /**
+  * 下载地址
+  */
+   @IpcHandle('diygw-down')
+   public downLink(data: any) {
+      shell.openExternal(data.text)
+   }
+ 
 }
