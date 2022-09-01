@@ -1,5 +1,5 @@
 import { Controller, IpcHandle, IpcOn, Window } from 'einf'
-import { BrowserWindow, dialog,clipboard,shell } from 'electron'
+import { BrowserWindow, dialog,clipboard,shell,screen } from 'electron'
 import { factory, Conf as JsonConf } from 'electron-json-config'
 import fse from 'fs-extra'
 import { download } from 'electron-dl';
@@ -18,6 +18,54 @@ export class AppController {
     this.dbConfig = factory()
   }
 
+
+  public openTest(config,data){
+    //如果打开的是后台管理界面
+    if(config.type){
+      //不是http表示本地目录
+      let ishttp = /^http(s)?:\/\/.*/i.test(data.url);
+      if(config.type=='adminh5'|| !ishttp){
+        let url = data.url
+        //如果用户配置的是静态html页面
+        if (url.indexOf('#') > 0 && url.indexOf("main.html")>0) {
+            url = url.substring(0, url.indexOf('#'))
+            shell.openExternal(url + '#/' + config.page+".html")
+            // this.uniappWin.loadURL(url + '#/' + config.page+".html")
+            // this.uniappWin.setAlwaysOnTop(true, 'floating')
+        }else if(url.indexOf("main.html")){
+            // this.uniappWin.loadURL(url + '#/' + config.page+".html")
+            // this.uniappWin.setAlwaysOnTop(true, 'floating')
+            shell.openExternal(url + '#/' + config.page+".html")
+        }else{
+          // this.uniappWin.loadURL(url + config.page+".html")
+          shell.openExternal(url + '#/' + config.page+".html")
+        }
+      }else{
+        let url = data.url
+        if (url.indexOf('#') > 0) {
+          url = url.substring(0, url.indexOf('#'))
+        }
+        // shell.openExternal(url + '#/' + config.page)
+        this.uniappWin.loadURL(url + '#/' + config.page)
+        this.uniappWin.setAlwaysOnTop(true, 'floating')
+      }
+    }else{
+      const projectPath = data['uniapp'] + '/pages/'
+      const pageFile = projectPath + config.page + '.vue'
+      if (!fse.existsSync(pageFile)) {
+        //给渲染进程发送消息
+        this.mainWin.webContents.send('message', { cmd: 'no-file-exist' })
+        return
+      }
+      let url = data.url
+      if (url.indexOf('#') > 0) {
+        url = url.substring(0, url.indexOf('#'))
+      }
+      this.uniappWin.loadURL(url + '#/pages/' + config.page)
+      this.uniappWin.setAlwaysOnTop(true, 'floating')
+    }
+  }
+  
   /**
    * 打开uniapp调试窗口 或者 重新加载窗口
    * @param config 
@@ -26,7 +74,13 @@ export class AppController {
   public openUniapp(config: any) {
     const data: any = this.dbConfig.get(config.id)
     if (data && data.url) {
-      if (!this.uniappWin) {
+      if(config.type){
+        const { width, height } = screen.getPrimaryDisplay().workAreaSize
+        config.width = width
+        config.height = height
+      }
+      let ishttp = /^http(s)?:\/\/.*/i.test(data.url);
+      if (!this.uniappWin && ishttp) {
         this.uniappWin = new BrowserWindow({
           width: config.width || 388,
           height: config.height || 680,
@@ -36,13 +90,7 @@ export class AppController {
           this.uniappWin = null
         })
       }
-
-      let url = data.url
-      if (url.indexOf('#') > 0) {
-        url = url.substring(0, url.indexOf('#'))
-      }
-      this.uniappWin.loadURL(url + '#/pages/' + config.page)
-      this.uniappWin.setAlwaysOnTop(true, 'floating')
+      this.openTest(config,data)
     } else {
       dialog.showMessageBox({
         type: 'warning',
@@ -61,19 +109,8 @@ export class AppController {
   public changeUniapp(config: any) {
     const data: any = this.dbConfig.get(config.id)
     if (data && data.url && this.uniappWin) {
-      const projectPath = data['uniapp'] + '/pages/'
-      const pageFile = projectPath + config.page + '.vue'
-      if (!fse.existsSync(pageFile)) {
-        //给渲染进程发送消息
-        this.mainWin.webContents.send('message', { cmd: 'no-file-exist' })
-        return
-      }
-      let url = data.url
-      if (url.indexOf('#') > 0) {
-        url = url.substring(0, url.indexOf('#'))
-      }
-      this.uniappWin.loadURL(url + '#/pages/' + config.page)
-      this.uniappWin.setAlwaysOnTop(true, 'floating')
+       this.openTest(config,data)
+      
     }
   }
 
