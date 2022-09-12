@@ -4,11 +4,12 @@
   "author": "DIYGW",
   "description": "DIYGW可视化",
   "main": "dist/main/index.js",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "scripts": {
     "dev": "rimraf dist && vite",
     "build": "rimraf dist && vite build",
-    "release": "rimraf dist && vite build"
+    "release": "rimraf dist && vite build",
+    "release32": "rimraf dist && rimraf dist_electron && vite build && electron-builder --win --ia32 "
   },
   "dependencies": {
     "einf": "^1.1.1",

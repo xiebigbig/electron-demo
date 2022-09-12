@@ -9,10 +9,10 @@ const config = {
   // electronDownload: {
   //   mirror: 'https://npm.taobao.org/mirrors/electron/',
   // },
-  publish:{
-    provider: "github",
-    releaseType:'release'
-  },
+  // publish:{
+  //   provider: "github",
+  //   releaseType:'release'
+  // },
   directories: {
     output: 'dist_electron'
   },
@@ -33,7 +33,7 @@ const config = {
     artifactName: "diygw-macos-${version}.${ext}"
   },
   win: {
-    artifactName: "diygw-windows-${version}.${ext}"
+    artifactName: "diygw-windows-${version}-${arch}.${ext}"
   },
   linux: {
     artifactName: "diygw-linux-${version}.${ext}"
