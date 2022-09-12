@@ -1,4 +1,4 @@
-import { app, BrowserWindow, screen } from "electron";
+import { app, BrowserWindow,globalShortcut , screen } from "electron";
 import { MainMenu } from './menu'
 import { info } from './utils'
 import path from 'path'
@@ -61,6 +61,34 @@ export async function createWindow() {
   mainWin.once('ready-to-show', () => {
     mainWin && mainWin.show()
     mainWin?.maximize()
+  })
+
+  mainWin.on('focus', () => {
+    // mac下快捷键失效的问题
+    if (process.platform === 'darwin') {
+      let contents = mainWin.webContents
+      globalShortcut.register('CommandOrControl+C', () => {
+        contents.copy()
+      })
+
+      globalShortcut.register('CommandOrControl+V', () => {
+        contents.paste()
+      })
+
+      globalShortcut.register('CommandOrControl+X', () => {
+        contents.cut()
+      })
+
+      globalShortcut.register('CommandOrControl+A', () => {
+        contents.selectAll()
+      })
+    }
+  })
+
+  mainWin.on('blur', () => {
+    if (process.platform === 'darwin') {
+      globalShortcut.unregisterAll() // 注销键盘事件
+    }
   })
 
   mainWin.webContents.setWindowOpenHandler(data => {
