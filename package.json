@@ -7,9 +7,8 @@
   "version": "1.0.15",
   "scripts": {
     "dev": "rimraf dist && vite",
-    "build": "rimraf dist && vite build",
-    "release": "rimraf dist && vite build",
-    "release32": "rimraf dist && rimraf dist_electron && vite build && electron-builder --win --ia32 "
+    "build": "rimraf dist && rimraf dist_electron && vite build",
+    "release": "rimraf dist && rimraf dist_electron && vite build"
   },
   "dependencies": {
     "einf": "^1.3.0",
@@ -28,7 +27,7 @@
     "rimraf": "^3.0.2",
     "typescript": "^4.8.3",
     "vite": "^3.1.0",
-    "vite-plugin-doubleshot": "0.0.4",
+    "vite-plugin-doubleshot": "0.0.5",
     "vue-tsc": "^0.40.13"
   }
 }
