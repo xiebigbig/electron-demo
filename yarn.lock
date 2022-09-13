@@ -20,10 +20,10 @@
     ajv "^6.12.0"
     ajv-keywords "^3.4.1"
 
-"@doubleshot/builder@0.1.0-beta.2":
-  version "0.1.0-beta.2"
-  resolved "https://registry.yarnpkg.com/@doubleshot/builder/-/builder-0.1.0-beta.2.tgz#b23038edaf6efa16e2e693d2ce517686f8627fd5"
-  integrity sha512-51PnjPlRYPrffrBvPPMiTF7Dqos2wcrakJ+YNIOQ+4Cb6c2M69kocVVW2E8gZQLIpmAOPxkFOqTsiF1X+dwsWg==
+"@doubleshot/builder@0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@doubleshot/builder/-/builder-0.0.4.tgz#4b9e031a95955ca6f6599b247fef6648a61d2f41"
+  integrity sha512-cIUhgSFydUVQKGcf2OImckh5A87kxhG/0HuXZsULqeRWV0856SBe4HpP4aZArEDRYO3ELC638FAqTtOAaeny3w==
   dependencies:
     "@swc/core" "^1.2.203"
     bundle-require "^3.0.4"
@@ -3169,12 +3169,12 @@ verror@^1.10.0:
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
 
-vite-plugin-doubleshot@0.1.0-beta.2:
-  version "0.1.0-beta.2"
-  resolved "https://registry.yarnpkg.com/vite-plugin-doubleshot/-/vite-plugin-doubleshot-0.1.0-beta.2.tgz#bf0aad6d6e717576caf61ea6f0a9db06e1a89c95"
-  integrity sha512-XwXlve6na7I3grkaEoZSSUMwLM5ITeIYSelQfQAiueEmDlE1O+Leqb6vFqoV1ADJGMw/Rvs3ZFmcx1rNlModgQ==
+vite-plugin-doubleshot@0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/vite-plugin-doubleshot/-/vite-plugin-doubleshot-0.0.4.tgz#49562b9d27b702c3eca3de3f69f17448aafd2d65"
+  integrity sha512-jRm80sMl61rWLj/bIcq0FjnYAgIHrSIVqjTJCCcmYeh2xtIAqGDvI9ML7I8A7oabK8SuKBJQXt7qnncuVTZPMg==
   dependencies:
-    "@doubleshot/builder" "0.1.0-beta.2"
+    "@doubleshot/builder" "0.0.4"
 
 vite@^3.1.0:
   version "3.1.0"
