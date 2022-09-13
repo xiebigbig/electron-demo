@@ -12,23 +12,23 @@
     "release32": "rimraf dist && rimraf dist_electron && vite build && electron-builder --win --ia32 "
   },
   "dependencies": {
-    "einf": "^1.1.1",
+    "einf": "^1.3.0",
     "electron-dl": "^3.3.1",
     "electron-json-config": "^2.0.0",
     "fs-extra": "^10.1.0",
-    "vue": "^3.2.37"
+    "vue": "^3.2.39"
   },
   "devDependencies": {
     "@types/electron-devtools-installer": "^2.2.2",
-    "@vitejs/plugin-vue": "^3.0.3",
+    "@vitejs/plugin-vue": "^3.1.0",
     "electron": "^19.0.13",
     "electron-builder": "^23.3.3",
     "electron-devtools-installer": "^3.2.0",
     "electron-updater": "^5.2.1",
     "rimraf": "^3.0.2",
-    "typescript": "^4.7.4",
-    "vite": "^3.0.8",
+    "typescript": "^4.8.3",
+    "vite": "^3.1.0",
     "vite-plugin-doubleshot": "0.1.0-beta.2",
-    "vue-tsc": "^0.40.1"
+    "vue-tsc": "^0.40.13"
   }
 }
