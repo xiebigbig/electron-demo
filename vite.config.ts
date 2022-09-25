@@ -23,11 +23,7 @@ export default defineConfig({
       },
       electron: {
         build: {
-          config: './electron-builder.config.js',
-          cliOptions: {
-            ia32: true,
-            x64: true
-          }
+          config: './electron-builder.config.js'
         },
         preload: {
           entry: 'src/preload/index.ts',
