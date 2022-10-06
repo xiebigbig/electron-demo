@@ -19,6 +19,7 @@ export function reloadPage(win: any) {
     buttons: ['重新加载', '取消'],
     defaultId: 1,
     cancelId: 0,
+    noLink: true,
     title: '重新加载',
     message: '系统可能不会保存您所做的更改,请先保存'
   }
@@ -36,8 +37,7 @@ export function info() {
     title: '关于我们',
     type: 'info',
     message: 'DIY官网可视化工具',
-    detail: `网站地址:https://www.diygw.com\nDIY官网可视化工具做好的可视化拖拽开发工具\n无须编程 零代码基础 所见即所得设计工具\n轻松制作微信小程序、支付宝小程序、Vue3、H5、WebApp、UNIAPP、单页动画\n版本信息：${process.env.VUE_APP_VERSION
-      }\n引擎版本：${process.versions.v8
+    detail: `网站地址:https://www.diygw.com\nDIY官网可视化工具做好的可视化拖拽开发工具\n无须编程 零代码基础 所见即所得设计工具\n轻松制作微信小程序、支付宝小程序、Vue3、H5、WebApp、UNIAPP、单页动画\n版本信息：${process.env.VERSION
       }\n当前系统：${type()} ${arch()} ${release()}`,
     noLink: true,
     buttons: ['确定']
