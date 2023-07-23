@@ -193,6 +193,8 @@ export class AppController {
    */
   @IpcHandle('diygw-save-code')
   public async saveCode(config: any) {
+
+    debugger
     const data: any = this.dbConfig.get(config.id)
     //判断是否移动端配置,如果非移动端的都直接返回
     if (config.mobile) {
@@ -295,7 +297,7 @@ export class AppController {
         fse.outputFileSync(pageConfig, JSON.stringify(configData, undefined, 4))
       } else if (config.code.type === 'h5') {
         const projectPath = data[config.code.type]
-        const pageFile = projectPath + config.data.path + '.html'
+        const pageFile = projectPath + "/" + config.data.path + '.html'
         fse.outputFileSync(pageFile, config['code']['htmlValue'])
       } else {
         let projectPath = data[config.code.type]
@@ -418,9 +420,6 @@ export class AppController {
 
         const jsonPageFile = projectPath + config.data.path + '.json'
         fse.outputFileSync(jsonPageFile, config['code']['jsonValue'])
-
-
-
       }
     } else if (config.code.type === 'eleadmin' || config.code.type === 'eleoption') {
       const projectPath = data[config.code.type]
