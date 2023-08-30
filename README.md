@@ -11,7 +11,36 @@ DIY官网可视化工具做好的可视化拖拽开发工具无须编程、零�
 
 DIY官网可视化工具打造低代码可视化一键生成导出源码工具设计一次打通设计师+产品经理+技术开发团队必备低代码可视化工具。从想法到原型到源码，一步到位低代码生成源码工具
 
-更多设计前往https://www.diygw.com 设计
+src\main\window.ts
+```
+  mainMenu.createMainMenu()
+
+  const { width, height } = screen.getPrimaryDisplay().workAreaSize
+
+  const preloadPath = path.join(__dirname, '../preload/index.js')
+  const mainWin = new BrowserWindow({
+    width: width,
+    height: height,
+    show: false,
+    webPreferences: {
+      webSecurity: false, //解决跨域
+      preload: preloadPath
+    }
+  })
+  // const URL = isDev
+  //   ? process.env.DS_RENDERER_URL
+  //   : `file://${path.join(app.getAppPath(), 'dist/renderer/index.html')}`
+
+  const URL = isDev ? 'http://localhost:9091/' : 'https://www.diygw.com'
+
+  mainWin.loadURL(URL)
+
+  mainWin.once('ready-to-show', () => {
+    mainWin && mainWin.show()
+    mainWin?.maximize()
+  })
+
+```
 
 
 
