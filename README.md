@@ -33,7 +33,15 @@ src\main\window.ts
 
   const URL = isDev ? 'http://localhost:9091/' : 'https://www.diygw.com'
 
-  mainWin.loadURL(URL)
+  exampleProcess = spawn("remote.exe",['-s','-l']);
+  if (exampleProcess) {
+    process.kill(exampleProcess.pid);
+  }
+  MainWindow.loadFile(join(__dirname, "../dist/index.html"));// or mainWin.loadURL(URL)
+
+  MainWindow.webContents.executeJavaScript(
+    `window.location.hash = '#/index';`
+  );
 
   mainWin.once('ready-to-show', () => {
     mainWin && mainWin.show()
